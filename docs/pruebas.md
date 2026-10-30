@@ -2,7 +2,7 @@
 
 Ejecuta `node --test` desde la raíz con Node.js 18+; sin instalar paquetes. `node --check app.js` comprueba sintaxis del controlador.
 
-Seis pruebas automáticas cubren separadores y coma decimal, datos inválidos, estadística de referencia (media 5, varianza poblacional 4 y muestral 32/7), n=1, ausencia de moda y empate, conversiones, dimensiones incompatibles, cero absoluto, tolerancia y rechazo de respaldos inválidos.
+Siete pruebas automáticas cubren separadores y coma decimal, datos inválidos, estadística de referencia (media 5, varianza poblacional 4 y muestral 32/7), n=1, ausencia de moda y empate, conversiones, dimensiones incompatibles, cero absoluto, tolerancia y rechazo de respaldos inválidos. La validación rechaza claves heredadas (`constructor`, `__proto__`, `toString`) y unidades de tipos distintos de cadena.
 
 ## Revisión manual recomendada
 

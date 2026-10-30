@@ -28,6 +28,7 @@ export const units={
 };
 export function convert(value,from,to){
   if(!Number.isFinite(value)||Math.abs(value)>1e100)throw Error('Ingresa un número finito de magnitud hasta 1e100.');
+  if(typeof from!=='string'||typeof to!=='string'||!Object.hasOwn(units,from)||!Object.hasOwn(units,to))throw Error('Selecciona unidades válidas.');
   const a=units[from],b=units[to];
   if(!a||!b||a.dimension!==b.dimension)throw Error('Las unidades deben medir la misma magnitud.');
   if(a.dimension==='temperatura'){
@@ -45,7 +46,7 @@ export function checkAnswer(actual,proposed,tolerance){
   return {correct:Math.abs(actual-proposed)<=tolerance,difference:Math.abs(actual-proposed)};
 }
 export function validateBackup(data){
-  if(!data||data.version!==1||typeof data.raw!=='string'||data.raw.length>30000||typeof data.sample!=='boolean'||typeof data.value!=='string'||data.value.length>100||!units[data.from]||!units[data.to])throw Error('Respaldo incompatible o inválido.');
+  if(!data||data.version!==1||typeof data.raw!=='string'||data.raw.length>30000||typeof data.sample!=='boolean'||typeof data.value!=='string'||data.value.length>100||typeof data.from!=='string'||typeof data.to!=='string'||!Object.hasOwn(units,data.from)||!Object.hasOwn(units,data.to))throw Error('Respaldo incompatible o inválido.');
   if(units[data.from].dimension!==units[data.to].dimension)throw Error('El respaldo contiene magnitudes incompatibles.');
   if(data.raw.trim())parseData(data.raw);
   if(data.value.trim())convert(Number(data.value.replace(',','.')),data.from,data.to);
