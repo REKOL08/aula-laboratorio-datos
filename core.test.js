@@ -1,0 +1,9 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {parseData,describe,convert,checkAnswer,validateBackup} from './core.js';
+test('coma decimal y separadores explícitos',()=>{assert.deepEqual(parseData('1,5; 2.5\n-3'),[1.5,2.5,-3]);assert.throws(()=>parseData('1,2,3'));assert.throws(()=>parseData('Infinity'));assert.throws(()=>parseData(''));});
+test('estadística muestral conocida',()=>{const x=describe([2,4,4,4,5,5,7,9]);assert.equal(x.mean,5);assert.equal(x.median,4.5);assert.deepEqual(x.modes,[4]);assert.equal(x.variance,32/7);assert.equal(describe([2,4,4,4,5,5,7,9],false).variance,4);});
+test('un único dato, empates y moda ausente',()=>{assert.equal(describe([5]).variance,null);assert.equal(describe([5],false).variance,0);assert.deepEqual(describe([1,2]).modes,[]);assert.deepEqual(describe([1,1,2,2]).modes,[1,2]);});
+test('conversiones y compatibilidad dimensional',()=>{assert.equal(convert(2,'km','m').result,2000);assert.equal(convert(60,'min','h').result,1);assert.throws(()=>convert(1,'kg','m'));assert.throws(()=>convert(-274,'C','K'));assert.ok(Math.abs(convert(32,'F','C').result)<1e-10);assert.equal(convert(0,'K','C').result,-273.15);});
+test('validación con tolerancia absoluta',()=>{assert.equal(checkAnswer(1/3,.333,.001).correct,true);assert.equal(checkAnswer(10,11,.1).correct,false);assert.throws(()=>checkAnswer(1,1,-1));});
+test('respaldo limita tipos, valores y magnitudes',()=>{const x={version:1,raw:'1;2',sample:true,value:'2',from:'m',to:'cm'};assert.deepEqual(validateBackup(x),x);assert.throws(()=>validateBackup({...x,from:'inventado'}));assert.throws(()=>validateBackup({...x,raw:'<script>'}));assert.throws(()=>validateBackup({...x,to:'kg'}));});
